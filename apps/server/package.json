@@ -1,0 +1,22 @@
+{
+  "name": "@theiaxr/server",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "dev:mock": "tsx watch src/index.ts --mock",
+    "start": "tsx src/index.ts",
+    "test": "vitest run",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@theiaxr/shared": "workspace:*",
+    "fastify": "5.12.8"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.11",
+    "tsx": "4.23.15",
+    "vitest": "5.1.2"
+  }
+}
