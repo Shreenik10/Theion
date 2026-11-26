@@ -1,0 +1,3 @@
+# reference/
+
+Everything in `reference/` is read-only source material: the working prototype (`prototype/index.html`), the Ingram School of Nursing rubric (`ingram_rubric/`), the official Saylor Lee SP script (`saylor_lee/`), the original master prompt, and a cleaned copy of the old Theia-XR/platform repo (`old_repo/`, with what was left out listed in `old_repo/EXCLUDED.md`). Nothing in this folder runs, is built, is installed or is imported by the application; it is not part of the pnpm workspace. Do not edit these files. When something here is reused, it is copied or adapted into the new code and recorded in `REUSE.md` with its source path.
