@@ -1,0 +1,18 @@
+{
+  "name": "theiaxr",
+  "private": true,
+  "packageManager": "pnpm@10.34.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "concurrently -n server,web -c blue,green \"pnpm --filter @theiaxr/server dev\" \"pnpm --filter @theiaxr/web dev\"",
+    "dev:mock": "concurrently -n server,web -c blue,green \"pnpm --filter @theiaxr/server dev:mock\" \"pnpm --filter @theiaxr/web dev\"",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "10.0.7",
+    "typescript": "7.0.2"
+  }
+}
