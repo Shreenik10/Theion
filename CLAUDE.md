@@ -37,7 +37,8 @@ This means:
 ## 4. Reference material in the repo (read first)
 
 - `reference/prototype/index.html`: the working Claude artifact prototype (one HTML file). It contains two cases with English and French text, the fact-gated patient prompt, deterministic and LLM-judged scoring with quote verification, the feedback screen, and JSON/CSV export.
-- `reference/ingram_rubric/`: the Ingram School of Nursing health history rubric (source document).
+- `reference/ingram_rubric/`: the Ingram School of Nursing health history rubric. The source is the official course rubric, `OSCE_rubric_F24_from_old_repo.pdf` ("OSCE Rubric - Fall 2024 HHx Assessment (FINAL)", NUR1-338). The other files there are context only.
+- `reference/saylor_lee/`: the official Saylor Lee SP script (F24 Midterm OSCE). It is the clinical source for Saylor Lee.
 - `VISION.md`: the long-term platform vision. Context only. Where it conflicts with this prompt, this prompt wins.
 
 Rules for the old repository (a copy sits in `reference/old_repo/`):
@@ -136,7 +137,7 @@ The scorer is its own component with its own model setting. Item types:
 - `fact_elicited`: deterministic, from the fact reveal log
 - `action_performed`: deterministic, from the action log, with optional time windows
 - `judged`: LLM-judged against written anchors. Every judgment must cite verbatim transcript quotes; the server checks that each quote exists in the transcript and sets the item to "not met" when it does not.
-- `leveled_section`: a rubric section scored on named performance levels with anchors, as in the Ingram rubric (Excellent 5, Proficient 4, Developing 3, Unsatisfactory 1, Not applicable 0), including its mandatory-item rules.
+- `leveled_section`: a rubric section scored on named performance levels with anchors, as in the Ingram rubric: Exceptional (E), Proficient (P), Developing (D), Unsatisfactory (U) and Not applicable, including its mandatory-item rules. Point values come from the assessment profile, never from code. In the official rubric, most sections score 6.5, 5, 3.5, 1 or 0, and clinical judgement scores 10, 7, 5, 3 or 0.
 
 Score only observed evidence. Store the model id and prompt version with every score. Report agreement across repeated runs for judged items. All automated scoring is formative.
 
@@ -199,10 +200,10 @@ Rules:
 
 ## 9. Seed cases
 
-Both come from the prototype. Set `clinical_review_status: "draft"` on both; faculty review is required before use with learners.
+Both start from the prototype. Set `clinical_review_status: "draft"` on both; faculty review is required before use with learners.
 
 1. **Robert Tremblay, medicine, 8 minutes.** Adult with shortness of breath. Focused history, examination and investigation actions, then a case presentation to the attending. Assessment profile: `medicine.json` (history, examination, investigations, clinical reasoning, communication). This rubric was drafted by the Theia team, not by a medical school.
-2. **Saylor Lee, nursing, 15 minutes.** Health history interview. Assessment profile: `nursing.json`, the Ingram rubric with its 10 sections, its performance levels, and its mandatory-item rules. Take the rubric from `reference/ingram_rubric/`; where the prototype and the source document differ, the source document wins. Some of Saylor Lee's facts are marked as placeholders in the prototype; keep those markers.
+2. **Saylor Lee, nursing, 15 minutes.** Health history interview. Assessment profile: `nursing.json`, the official Ingram rubric with its 14 sections (94.5 points in total), its performance levels, and its mandatory-item rules. Take the rubric from `reference/ingram_rubric/OSCE_rubric_F24_from_old_repo.pdf` and Saylor Lee's facts from the SP script in `reference/saylor_lee/`. Where the prototype differs from either source, the source wins (see `REUSE.md` sections 4 and 5). Where the SP script leaves a detail to the actor or says nothing, mark it `TODO(clinical)`; never fill it in yourself. The station runs 15 minutes with a 1-minute warning.
 
 The name is spelled "Saylor Lee".
 
@@ -227,7 +228,7 @@ Stop.
 **M2. Scoring, feedback, educator review**
 Acceptance:
 - Deterministic items score correctly on three scripted transcripts per case (strong, average, weak) that you write and include.
-- Saylor Lee is scored on the 10 Ingram sections with the correct levels and mandatory-item rules; show a worked example for each rule.
+- Saylor Lee is scored on the 14 official Ingram sections with the correct points (94.5 in total), levels and mandatory-item rules; show a worked example for each rule.
 - Every judged item cites quotes that exist in the transcript (verified automatically).
 - Scoring the same transcript 5 times: report agreement per item.
 - An educator override persists and both values appear in the export.
