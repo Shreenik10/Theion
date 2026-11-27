@@ -346,7 +346,7 @@ The order is the tracker's. This plan adds no tickets.
 ### 10.1 Answered by Shreenik at review (2026-11-26)
 
 1. **Current master prompt: the Google Doc.** `CLAUDE.md` is now synced to it (this ticket). The Claude Docs copy of "TheiaXR Build Plan and Tickets" (16 November) is out of date. It still says to build on the old repo, and it lists 10 rubric sections and the old ticket wording. Retire it or update it from the Google Doc.
-2. **Anthropic API account: none yet. One is needed before A7 (week 3, from 30 November).** Phase A runs in mock mode until then. Setup steps are in section 10.3.
+2. **Anthropic API account: none yet. One is needed before A7 (week 3, from 30 November).** Phase A runs in mock mode until then. Setup steps are in section 10.3. Still to decide with the team: use the lab's existing account or a new Theion one. A Claude Team (chat) plan has no API access; only a Console (API) organization works. A lab Console account is fine for Phase A if its owner agrees and gives TheiaXR its own workspace and spending limit. Move to a Theion-owned account before the pilot (B10).
 3. **Patient model:** start on the fast model, Haiku 5.5. Keep it if it passes the A8 safety test.
 4. **Professionalism (Ingram section 14): the AI scores it.** It is a judged section with checked quotes. An educator can override it with a reason. This closes REUSE.md open item 8.3.
 5. **Node version: Node 26 everywhere.** It is the current long-term support line. CI is moved from Node 24 to 26, and `.nvmrc` pins 26.
