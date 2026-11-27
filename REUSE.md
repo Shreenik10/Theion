@@ -196,5 +196,5 @@ What this means for the build:
 
 1. Who is the faculty reviewer for Saylor Lee's TODO(clinical) items and the French wording?
 2. What are "Level 4: 11 points minimum" and the other levels on the last page of the official rubric?
-3. Should the professionalism section (14) be AI-scored, or only flagged for an educator?
-4. The master prompt still says the Ingram rubric has 10 sections on a 5 / 4 / 3 / 1 / 0 scale (sections 8.4 and 9). Should it be corrected? Changing the agent rulebook goes through Dr. Poenaru's review.
+3. ~~Should the professionalism section (14) be AI-scored, or only flagged for an educator?~~ Answered 2026-11-26 (Shreenik): the AI scores it, with checked quotes; an educator can override.
+4. ~~The master prompt still says the Ingram rubric has 10 sections on a 5 / 4 / 3 / 1 / 0 scale (sections 8.4 and 9). Should it be corrected? Changing the agent rulebook goes through Dr. Poenaru's review.~~ Answered 2026-11-26: the Google Doc master prompt already has the 14 sections; `CLAUDE.md` was synced to it in A3.

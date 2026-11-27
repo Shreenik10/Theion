@@ -13,4 +13,5 @@
 - `PLAN.md`: architecture, file tree, dependencies and why, data model, licence notes, cost assumptions, risks, and open questions (5 for the review, the rest listed).
 - Follows the master prompt on the Google Doc's second tab (14 Ingram sections, 94.5 points), which is newer than the repo's `CLAUDE.md`.
 - No application code. No packages installed. No paid service used; cost $0.
-- Waiting for Shreenik and Mohsen to approve.
+- Review answers recorded (PLAN.md 10.1). `CLAUDE.md` synced to the Google Doc master prompt. Node 26 everywhere (CI, `.nvmrc`, `engines`).
+- Waiting for Mohsen to approve. No Anthropic API account yet (needed before A7).

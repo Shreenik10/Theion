@@ -49,3 +49,17 @@ Each entry: decision, alternatives considered, reason.
 **5. Candidate models: Haiku 5.5 for patient and synthetic student, Opus 5.5 for scenario, scorer and reviewer.**
 - Alternatives: Sonnet 5.5 for the patient.
 - Reason: speed and cost per turn. To be confirmed by the A8 safety test and A15 cost measurement (PLAN.md open question 3).
+
+## 2026-11-26: answers at the A3 review (Shreenik)
+
+**6. The Google Doc master prompt is the source; `CLAUDE.md` is synced to it.** Confirms decision 1 above. Five edits were made to `CLAUDE.md` (reference list, leveled scoring, both seed cases, M2). The Claude Docs copy of the plan is out of date.
+
+**7. Patient starts on Haiku 5.5** and keeps it if it passes the A8 safety test. Confirms decision 5 for the patient.
+
+**8. The AI scores Ingram section 14 (professionalism).**
+- Alternatives: flag concerns only, for an educator to score.
+- Reason: Shreenik's decision. It is a judged section with checked quotes, an educator can override it, and all scores are formative.
+
+**9. Node 26 everywhere.**
+- Alternatives: Node 24 (what CI used).
+- Reason: Node 26 is the current long-term support line and is what the builders run. `.nvmrc` pins 26, CI reads it, and `engines` requires 26 or later.

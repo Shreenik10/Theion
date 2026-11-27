@@ -9,7 +9,7 @@ Ticket A3. Written 2026-11-26 on branch `a3-plan`. No application code is writte
 2. The TheiaXR Ticket Tracker sheet (37 tickets, A1 to B16).
 3. The decisions Shreenik made in A1 (`REUSE.md` section 7).
 
-The repo's `CLAUDE.md` is an older copy of the master prompt. It still says the Ingram rubric has 10 sections scored 5/4/3/1/0. Where it differs, this plan follows the Google Doc. See open question 1.
+Shreenik confirmed on 2026-11-26 that the Google Doc is the current master prompt. `CLAUDE.md` was synced to it in this ticket (14 Ingram sections, 94.5 points, SP script as the source). The Claude Docs copy of "TheiaXR Build Plan and Tickets" (16 November) is older still, and should not be used.
 
 ---
 
@@ -21,14 +21,14 @@ The repo's `CLAUDE.md` is an older copy of the master prompt. It still says the 
 - **Scoring is separate from the patient.** Some rubric items are counted by plain code (was this fact asked? was this action done?). Others are judged by a strong model, which must quote the transcript. The server checks every quote. If the quote isn't in the transcript, the item is not met.
 - **Five agents, each with one job, passing checked files.** Scenario, patient, evaluation and feedback, synthetic student, educator reviewer. They never chat with each other. Their instructions are plain text files in `agents/`, which Dr. Poenaru reviews.
 - **Everything runs free in mock mode.** Every AI, speech and video service has a stand-in that needs no key and no network. All automated tests use the stand-ins. Real Claude calls start in A7 (patient), and only with Shreenik's approval of the spending cap.
-- **What changes from the master prompt:** nothing in the stack. Three technical facts about the current Claude models shape the design (section 4.3). Five questions for you are in section 10.
+- **What changes from the master prompt:** nothing in the stack. Three technical facts about the current Claude models shape the design (section 4.3). Shreenik's answers from the review are in section 10.1. One item is still open: getting an Anthropic API account before A7.
 
 How to review this plan in 5 steps:
 1. Read section 1 (this one) and section 10 (questions).
 2. Look at the picture in section 2.1 and the turn walkthrough in 2.3.
 3. Skim the data model in section 5. Each session must be traceable to its exact case, rubric and agent versions.
 4. Read the risks in section 9.
-5. Answer the questions in section 10, then approve or reject the ticket. Mohsen reviews sections 2 to 6.
+5. Check the answers in section 10.1, then approve or reject the ticket. Mohsen reviews sections 2 to 6.
 
 ---
 
@@ -197,7 +197,7 @@ Versions are the current npm releases as of 2026-11-26. Each ticket re-checks th
 |---|---|---|---|---|---|
 | `@anthropic-ai/sdk` | 1.14.0 | All Claude calls | The official SDK. Has structured outputs, streaming, typed errors and retries. | A7 | — |
 | `drizzle-orm`, `drizzle-kit` | 0.45.4, 0.31.11 | Database and migrations | Required by the master prompt. One schema for SQLite and Postgres. | A6 | That the same schema moves to Postgres cleanly. Test in B10. |
-| `better-sqlite3` | 13.2.0 | SQLite driver | The driver Drizzle supports best | A6 | Whether it ships a prebuilt binary for Node 26 on Windows. If not, it needs build tools (a manual Windows step). The alternative is Node's built-in `node:sqlite`, but only if Drizzle supports it. Decide in A6. |
+| `better-sqlite3` | 13.2.0 | SQLite driver | The driver Drizzle supports best | A6 | Whether it ships a prebuilt binary for Node 26 (the project's Node version) on Windows. If not, it needs build tools (a manual Windows step). The alternative is Node's built-in `node:sqlite`, but only if Drizzle supports it. Decide in A6. |
 | `fastify-type-provider-zod` | 7.0.0 | Request and response checking from zod schemas | Keeps API bodies and the OpenAPI spec tied to one schema | A6 | Compatibility with zod 4.6 and Fastify 5.12 |
 | `@fastify/swagger` | 9.9.5 | OpenAPI spec generation | Standard for Fastify | A9 | — |
 | `@playwright/test` | 1.65.1 | End-to-end tests (mock mode) | Required by the master prompt | A9 | Browser download size in CI |
@@ -220,7 +220,7 @@ Model names come from Anthropic's current model table (cached 2026-11-03). They 
 | `REVIEWER_MODEL` | `claude-opus-5-5` | Same | `high` |
 | `SCENARIO_MODEL` | `claude-opus-5-5` | Same | `high` |
 
-If Haiku invents facts in the A8 safety test, the next step is `claude-sonnet-5-5` for the patient. That costs more per turn but is still fast.
+Decided 2026-11-26: the patient starts on Haiku 5.5 and stays there if it passes the A8 safety test. If it invents facts, the next step is `claude-sonnet-5-5`, which costs more per turn but is still fast.
 
 Three API facts the code must respect:
 1. **No forced tool calls on the current Opus and Sonnet models.** Requests that force a tool return an error. Every agent hand-off uses **structured outputs** (a JSON schema built from the zod schema), then zod checks the result again on our side.
@@ -329,12 +329,13 @@ The order is the tracker's. This plan adds no tickets.
 |---|---|---|
 | The patient invents a finding | Learners trust it; this is the main clinical risk in Phase A | Two-step fact gate; unrevealed facts never in the prompt; findings only from files; A8 safety test with the real model; `validation_tests.json` run on every package change |
 | The scorer gives different scores on repeat runs | Fair scoring is the product's value; randomness cannot be switched off | Deterministic items wherever possible (counts and mandatory rules in code); judged items need checked quotes; A11 reports per-item agreement; low-agreement items go to Dr. Poenaru for clearer anchors |
+| The AI scores professionalism (section 14) | The rubric leaves this section to the evaluator's discretion | Decided: the AI scores it, with quotes like every judged section. An educator can override it with a reason, and every score is labelled formative. |
 | Saylor Lee's content is wrong or incomplete | The SP script leaves many details to the actor; French wording is unreviewed | Every gap marked TODO(clinical) and listed in the manifest; package stays `draft`; a faculty reviewer is still unnamed (REUSE.md section 8) |
 | Agents share blind spots | The reviewer agent can pass a bad encounter | Human reading in A19 is the acceptance test |
 | Two model calls per turn are too slow for voice | The M3 target is a median under 2.5 seconds from end of speech to patient audio | Fast model on both steps, caching, streaming the reply. Measure turn times from A7 so the risk is visible before B5. A fallback (one call with a short allowed-fact list) can be tested in B5 if needed. |
 | A safety filter refuses a clinical prompt | A refused reply looks like a broken patient | Refusals are logged and shown clearly; fallback model on Opus calls; A8 includes sensitive topics (sexual health, substance use) to find refusals early |
 | Native SQLite driver fails to install on Node 26 / Windows | Blocks A6 on Siqi's machine | Check first in A6; documented fallback (see 4.2) |
-| The repo's `CLAUDE.md` is out of date | Claude Code reads `CLAUDE.md` first, so it would build the old 10-section rubric | Open question 1: update `CLAUDE.md` from the Google Doc before A5 and A10 |
+| Copies of the master prompt drift apart | Claude Code reads `CLAUDE.md` first, so an old copy builds the wrong rubric | The Google Doc is the source. `CLAUDE.md` was synced to it in A3. Any later change to the Google Doc is copied into `CLAUDE.md` in the same week, by pull request. The Claude Docs copy is retired or updated (section 10.1). |
 | Scope: five agents and two clients | Two builders | No client work until the text loop is accepted; VR only after the desktop walkthrough (tracker order) |
 | The old repo's OpenAI key is still live | Anyone with read access can use it | Not used or copied (KNOWN_ISSUES 1). Shreenik's decision stands, but this plan recommends revoking it, since nothing new depends on it. |
 
@@ -342,13 +343,13 @@ The order is the tracker's. This plan adds no tickets.
 
 ## 10. Open questions
 
-### 10.1 Five questions that change the plan (answers needed at review)
+### 10.1 Answered by Shreenik at review (2026-11-26)
 
-1. **Which master prompt is current?** The Google Doc's second tab (14 Ingram sections, 94.5 points) or the repo's `CLAUDE.md` (10 sections, 5/4/3/1/0)? This plan assumes the Google Doc. If so, may `CLAUDE.md` be replaced with the Google Doc text in a small separate pull request before A5? The master prompt says rule changes go through Dr. Poenaru.
-2. **Who holds the Anthropic API account, and what is the monthly cap?** A7 is the first ticket that needs a real key. Without one, Phase A stops after A6 in mock mode.
-3. **May the patient use the fast model (Haiku 5.5) if it passes the A8 safety test?** Or should it start on Sonnet 5.5? Sonnet is safer on facts and costs more per turn.
-4. **Professionalism (Ingram section 14): should the AI score it or only flag concerns?** The rubric leaves marks to the evaluator. This plan assumes "flag only, no AI deduction" (REUSE.md 8.3). That changes the scorer and the 94.5 total shown to learners.
-5. **Which Node version?** This computer has Node 26 and CI uses Node 24. The plan proposes Node 24 LTS everywhere (pinned in `.nvmrc`), which is also the safer bet for the SQLite driver.
+1. **Current master prompt: the Google Doc.** `CLAUDE.md` is now synced to it (this ticket). The Claude Docs copy of "TheiaXR Build Plan and Tickets" (16 November) is out of date. It still says to build on the old repo, and it lists 10 rubric sections and the old ticket wording. Retire it or update it from the Google Doc.
+2. **Anthropic API account: none yet. One is needed before A7 (week 3, from 30 November).** Phase A runs in mock mode until then. Setup steps are in section 10.3.
+3. **Patient model:** start on the fast model, Haiku 5.5. Keep it if it passes the A8 safety test.
+4. **Professionalism (Ingram section 14): the AI scores it.** It is a judged section with checked quotes. An educator can override it with a reason. This closes REUSE.md open item 8.3.
+5. **Node version: Node 26 everywhere.** It is the current long-term support line. CI is moved from Node 24 to 26, and `.nvmrc` pins 26.
 
 ### 10.2 Other open questions (do not block A4)
 
@@ -361,6 +362,16 @@ The order is the tracker's. This plan adds no tickets.
 - When can Ingram faculty do the walkthrough? Assumed early March 2027. (Shreenik)
 - Will Dr. Poenaru edit drafts of the agent instructions? The plan assumes drafts adapted from the prototype's prompts, starting in A7. (Dr. Poenaru)
 
+### 10.3 Getting an Anthropic API account (Shreenik or the Theion account owner)
+
+1. Go to platform.claude.com (the Claude Console) and sign up with a Theion address, not a personal one. Create an organization named for Theion.
+2. Under **Billing**, add a payment method and buy prepaid credits. $50 to $100 covers A7 to A10 (section 7).
+3. Under **Workspaces**, create a workspace called `theiaxr-dev`. Set a **monthly spend limit** on it ($100 to $200 to start), so a bug can't run up a bill.
+4. In that workspace, create an API key called `theiaxr-dev-siqi`. Copy it once. It is shown only once.
+5. Send it to Siqi through a password manager or another private channel, never by email, chat or GitHub. Siqi puts it in the repo's local `.env` file as `ANTHROPIC_API_KEY=...`. That file is never committed.
+
+Keys can be revoked and replaced in the same screen at any time. Usage per day appears under **Usage**, which feeds the weekly spending report.
+
 ---
 
 ## 11. What this ticket did not do
@@ -368,5 +379,5 @@ The order is the tracker's. This plan adds no tickets.
 - No application code, schemas, packages or agent instructions. Those start in A4.
 - No paid service was used. Cost: $0.
 - Package versions were read from npm, nothing new was installed. Compatibility marked "still to confirm" in 4.2 has not been tested.
-- `CLAUDE.md` was not changed (open question 1).
+- `CLAUDE.md` was synced to the Google Doc master prompt (5 edits: reference list, leveled scoring, both seed cases, M2 acceptance). Nothing else in it changed.
 - The tracker's Status column was not changed. That is for the weekly review.

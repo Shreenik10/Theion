@@ -4,7 +4,7 @@ AI standardized patient platform for OSCE practice in nursing and medicine. A fo
 
 ## Run it locally (no API keys needed)
 
-1. Install Node 22 or later and pnpm 10 (`npm install -g pnpm@10.34.9`).
+1. Install Node 26 or later and pnpm 10 (`npm install -g pnpm@10.34.9`).
 2. `pnpm install`
 3. `pnpm dev:mock`, then open http://127.0.0.1:5173
 4. `pnpm test` runs the tests.
